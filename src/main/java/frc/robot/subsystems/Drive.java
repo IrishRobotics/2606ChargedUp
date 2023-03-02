@@ -49,7 +49,7 @@ public class Drive extends SubsystemBase  {
     frontRight.setInverted(true);
     backRight.setInverted(true);
 
-    mecanumDrive = new MecanumDrive(frontLeft, backLeft, frontRight, backRight);  //FIX THIS
+    mecanumDrive = new MecanumDrive(frontLeft, backLeft, frontRight, backRight);  
    // mecanumDrive.setDeadband(0.15);//controller deadzone // bad
 
 
