@@ -22,7 +22,7 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
 
 public class Drive extends SubsystemBase  {
-
+   //I want gyro, but Gyro doesnt want me :(
    //Gyro gyro = new AHRS(SerialPort.Port.kMXP);
 
   private CANSparkMax frontRight = null;
@@ -32,28 +32,32 @@ public class Drive extends SubsystemBase  {
 
   private MecanumDrive mecanumDrive=null;
 
+  private double speedKill;
 
-
-  /** Creates a new Drive. */
+  
   public Drive() {
+    //Creating our spark motor controllers
     frontLeft=new CANSparkMax(Constants.FLSPARK,MotorType.kBrushless);
     frontRight=new CANSparkMax(Constants.FRSPARK,MotorType.kBrushless);
     backLeft=new CANSparkMax(Constants.BLSPARK,MotorType.kBrushless);
     backRight=new CANSparkMax(Constants.BRSPARK,MotorType.kBrushless);
+
+    //Brake mode... Might change this to be like smoother idk
     frontLeft.setIdleMode(IdleMode.kBrake);
     frontRight.setIdleMode(IdleMode.kBrake);
     backLeft.setIdleMode(IdleMode.kBrake);
     backRight.setIdleMode(IdleMode.kBrake);
 
     //ben was here 
+    //INVERT AHHHHHHHHHH
     frontRight.setInverted(true);
     backRight.setInverted(true);
 
-    mecanumDrive = new MecanumDrive(frontLeft, backLeft, frontRight, backRight);  
-   // mecanumDrive.setDeadband(0.15);//controller deadzone // bad
+    mecanumDrive = new MecanumDrive(frontLeft, backLeft, frontRight, backRight);  // Makes our mecanum drive system
+   // mecanumDrive.setDeadband(0.15);//controller deadzone // bad // really bad
 
 
-    
+    speedKill=Constants.driveSpeedKillDefault;
   }
 
     public double deadzone(double s){
@@ -65,15 +69,17 @@ public class Drive extends SubsystemBase  {
 
   @Override
   public void periodic() {
-   
-    
-    // This method will be called once per scheduler run
+   //Not really used... 
   }
-  public void updateDrive(double x, double y, double z, boolean cartesian){
-   // mecanumDrive.driveCartesian(driveControl.getLeftX()*Constants.speedkill, driveControl.getLeftY()*Constants.speedkill, driveControl.getRightX()*Constants.speedkill,gyro.getAngle());
-    mecanumDrive.driveCartesian(deadzone(x)*Constants.speedkill, -1*deadzone(y)*Constants.speedkill, deadzone(z)*Constants.speedkill);
-      
-    //backRight.set(0.1);
-  
+
+  public void updateDrive(double x, double y, double z, boolean cartesian){ //Updates the Drive so we can move
+    x=0;
+    y=0;
+    z=0; 
+    mecanumDrive.driveCartesian(deadzone(x)*speedKill, -1*deadzone(y)*speedKill, deadzone(z)*speedKill);
+  }
+
+  public void setDriveMode(double nsk){ //Sets the different Drive speed Modes (See Button Bindings)
+    speedKill=nsk;
   }
 }

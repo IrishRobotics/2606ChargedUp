@@ -8,49 +8,78 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.subsystems.Drive;
+import frc.robot.subsystems.ArmSub;
 import frc.robot.subsystems.ExampleSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 
-/**
- * This class is where the bulk of the robot should be declared. Since Command-based is a
- * "declarative" paradigm, very little robot logic should actually be handled in the {@link Robot}
- * periodic methods (other than the scheduler calls). Instead, the structure of the robot (including
- * subsystems, commands, and button mappings) should be declared here.
- */
+//The Important One
 public class RobotContainer {
-  // The robot's subsystems and commands are defined here...
-  private CommandXboxController conroller = new CommandXboxController(Constants.XboxControllerPort);
+  
+
+  //Controllers
+  private CommandXboxController driveController = new CommandXboxController(Constants.XboxControllerPortDrive);
+  private CommandXboxController armController = new CommandXboxController(Constants.XboxControllerPortArm);
+
+  //Subsystems
   private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
   public final Drive m_Drive = new Drive();
+  private final ArmSub m_UpperArm = new ArmSub(Constants.UPPERARM);
+  private final ArmSub m_LowerArm = new ArmSub(Constants.LOWERARM);
+
+  //Commands
   private final ExampleCommand m_autoCommand = new ExampleCommand(m_exampleSubsystem);
-
-
-  /** The container for the robot. Contains subsystems, OI devices, and commands. */
+ 
   public RobotContainer() {
-    // Configure the button bindings
-    configureButtonBindings();
+   
+    configureButtonBindings(); //Kinda obvious what this does
 
+    //Drive Command
     m_Drive.setDefaultCommand(new RunCommand(()->{
-      m_Drive.updateDrive(-conroller.getLeftY(),-conroller.getLeftX(),conroller.getRightX(),false);
+       m_Drive.updateDrive(-driveController.getLeftY(),-driveController.getLeftX(),driveController.getRightX(),false);
     },m_Drive));
+
+
+    //Lower Arm Control Command
+    m_LowerArm.setDefaultCommand(new RunCommand(()->{
+      m_LowerArm.updateArm(armController.getLeftY());
+    }, m_LowerArm));
+
+
+    //Upper Arm Control Command
+    m_UpperArm.setDefaultCommand(new RunCommand(()->{
+      m_UpperArm.updateArm(armController.getRightY());
+    }, m_UpperArm));
+
   }
 
-  /**
-   * Use this method to define your button->command mappings. Buttons can be created by
-   * instantiating a {@link GenericHID} or one of its subclasses ({@link
-   * edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then passing it to a {@link
-   * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
-   */
-  private void configureButtonBindings() {}
+  //It does what it says it does :Man_Shrugging:
+  private void configureButtonBindings() {
+    //Sprint Button
+    driveController.b().onTrue(new RunCommand(()->{
+      m_Drive.setDriveMode(Constants.driveSpeedKillSprint);
+    },m_Drive)).onFalse(new RunCommand(()->{
+      m_Drive.setDriveMode(Constants.driveSpeedKillDefault);
+    }, m_Drive));
+
+    //Crouch Button
+    driveController.x().onTrue(new RunCommand(()->{
+      m_Drive.setDriveMode(Constants.driveSpeedKillCrouch);
+    },m_Drive)).onFalse(new RunCommand(()->{
+      m_Drive.setDriveMode(Constants.driveSpeedKillDefault);
+    }, m_Drive));
+
+    
+
+  }
 
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
    *
    * @return the command to run in autonomous
    */
-  public Command getAutonomousCommand() {
+  public Command getAutonomousCommand() { //Prolly need to do this...
     // An ExampleCommand will run in autonomous
     return m_autoCommand;
   }

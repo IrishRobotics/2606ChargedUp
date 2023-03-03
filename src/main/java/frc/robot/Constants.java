@@ -13,15 +13,30 @@ package frc.robot;
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
+    //CAN ID's for the drive wheels
     public static final int FRSPARK=13;
     public static final int BRSPARK=14;
     public static final int BLSPARK=15;
     public static final int FLSPARK=12;
 
-    
-    public static final int XboxControllerPort = 0;
+    //Controller ports
+    public static final int XboxControllerPortDrive = 0;
+    public static final int XboxControllerPortArm = 1;
 
-    public static final double speedkill = .75;
+    //Variable Drive Speeds
+    public static final double driveSpeedKillDefault = .5;
+    public static final double driveSpeedKillCrouch = .1;
+    public static final double driveSpeedKillSprint = 1;
+
+    //CAN ID's for Arm Segments
+    public static final int UPPERARM = 3;
+    public static final int LOWERARM = 1;
+
+    //Speed of Arm
+    public static final double armSpeedKill = .35;
+
+
+
     //goinkers
     //ploinkers
     //doinkers
