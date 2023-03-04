@@ -35,6 +35,21 @@ public final class Constants {
     //Speed of Arm
     public static final double armSpeedKill = .35;
 
+    //Arm Angle Pre-sets
+    public static final double lowerArmLowGoalAng = 0.0;
+    public static final double upperArmLowGoalAng = 0.0;
+
+    //Arm PID Constants
+    public static final double kPArm = 0.0;
+    public static final double kIArm = 0.0;
+    public static final double kDArm = 0.0;
+
+    public static final double kPosTolArm = 0.0;
+    public static final double kVelTolArm = 0.0;
+
+    //Claw Solenoid Port
+    public static final int ClawChannel = 0;
+
 
 
     //goinkers

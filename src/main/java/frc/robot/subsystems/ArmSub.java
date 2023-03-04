@@ -32,6 +32,11 @@ public class ArmSub extends SubsystemBase {
   }
 
   public void updateArm(double d){ //Command for setting the speed for arms
+    
         armControl.set(d*Constants.armSpeedKill);
+  }
+
+  public double getAngle(){
+    return 0.0;
   }
 }

@@ -73,9 +73,11 @@ public class Drive extends SubsystemBase  {
   }
 
   public void updateDrive(double x, double y, double z, boolean cartesian){ //Updates the Drive so we can move
+    /* 
     x=0;
     y=0;
     z=0; 
+    */
     mecanumDrive.driveCartesian(deadzone(x)*speedKill, -1*deadzone(y)*speedKill, deadzone(z)*speedKill);
   }
 
