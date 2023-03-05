@@ -9,12 +9,13 @@ import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class ClawSub extends SubsystemBase {
-    Solenoid clawSolenoid;
-    private boolean state;
+  Solenoid clawSolenoid;
+  private boolean state;
+
   /** Creates a new ExampleSubsystem. */
   public ClawSub(int channel) {
-    state=false;
-    clawSolenoid=new Solenoid(PneumaticsModuleType.CTREPCM, channel);
+    state = false;
+    clawSolenoid = new Solenoid(PneumaticsModuleType.CTREPCM, channel);
     clawSolenoid.set(state);
   }
 
@@ -27,9 +28,10 @@ public class ClawSub extends SubsystemBase {
   public void simulationPeriodic() {
     // This method will be called once per scheduler run during simulation
   }
-  public boolean setSolenoid(boolean AHHHHHHHHHH){
+
+  public boolean setSolenoid(boolean AHHHHHHHHHH) {
     clawSolenoid.set(AHHHHHHHHHH);
-    state=AHHHHHHHHHH;
+    state = AHHHHHHHHHH;
     return AHHHHHHHHHH;
   }
 }

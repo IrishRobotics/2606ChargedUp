@@ -4,7 +4,6 @@
 
 package frc.robot.subsystems;
 
-
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
@@ -16,8 +15,8 @@ public class ArmSub extends SubsystemBase {
   WPI_TalonSRX armControl;
 
   public ArmSub(int ID) {
-    //Creates Talon Controller Supplied ID from constants through robot container
-    armControl=new WPI_TalonSRX(ID);
+    // Creates Talon Controller Supplied ID from constants through robot container
+    armControl = new WPI_TalonSRX(ID);
     armControl.setNeutralMode(NeutralMode.Brake);
   }
 
@@ -31,12 +30,12 @@ public class ArmSub extends SubsystemBase {
     // This method will be called once per scheduler run during simulation
   }
 
-  public void updateArm(double d){ //Command for setting the speed for arms
-    
-        armControl.set(d*Constants.armSpeedKill);
+  public void updateArm(double d) { // Command for setting the speed for arms
+
+    armControl.set(d * Constants.armSpeedKill);
   }
 
-  public double getAngle(){
+  public double getAngle() {
     return 0.0;
   }
 }
