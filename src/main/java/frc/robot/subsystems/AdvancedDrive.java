@@ -13,8 +13,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
-import frc.robot.Constants.DriveConstants;
-import frc.robot.Constants.OperatorConstants;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.MecanumDriveMotorVoltages;
@@ -26,10 +24,10 @@ import edu.wpi.first.wpilibj.SPI;
 
 public class AdvancedDrive extends SubsystemBase {
   // drive motors
-  private final CANSparkMax frontLeftMotor = new CANSparkMax (Constants.DriveConstants.kfrontLeftMotorDeviceID, MotorType.kBrushless);
-  private final CANSparkMax rearLeftMotor = new CANSparkMax   (Constants.DriveConstants.krearLeftMotorDeviceID, MotorType.kBrushless);
-  private final CANSparkMax frontRightMotor = new CANSparkMax (Constants.DriveConstants.kfrontRightMotorDeviceID, MotorType.kBrushless);
-  private final CANSparkMax rearRightMotor = new CANSparkMax  (Constants.DriveConstants.krearRightMotorDeviceID, MotorType.kBrushless);
+  private final CANSparkMax frontLeftMotor = new CANSparkMax (Constants.FLSPARK, MotorType.kBrushless);
+  private final CANSparkMax rearLeftMotor = new CANSparkMax   (Constants.BLSPARK, MotorType.kBrushless);
+  private final CANSparkMax frontRightMotor = new CANSparkMax (Constants.FRSPARK, MotorType.kBrushless);
+  private final CANSparkMax rearRightMotor = new CANSparkMax  (Constants.BRSPARK, MotorType.kBrushless);
 
   // Drive's encoders
   private final RelativeEncoder m_frontLeftEncoder = frontLeftMotor.getEncoder();
@@ -57,10 +55,10 @@ public class AdvancedDrive extends SubsystemBase {
     rearRightMotor.setInverted(true);
 
     // set deadband
-    m_drive.setDeadband(OperatorConstants.kDeadband);
+    m_drive.setDeadband(Constants.kDeadband);
 
     // set MaxOutput for drive's motors
-    m_drive.setMaxOutput(DriveConstants.kMaxOutput);
+    m_drive.setMaxOutput(Constants.kMaxOutput);
 
     // Sets the distance per pulse for the encoders
     // so we don't have to multiply the conversion factor each time we get the encoder's values
@@ -198,7 +196,7 @@ public void setDriveMotorControllersVolts(MecanumDriveMotorVoltages volts) {
 
   // The turn rate of the robot, in degrees per second
   public double getTurnRate() {
-    return m_navX2.getRate() * (DriveConstants.kGyroReversed ? -1.0 : 1.0);
+    return m_navX2.getRate() * (Constants.kGyroReversed ? -1.0 : 1.0);
   }
 
   // Below are functions for Odometry ==========================================================================
