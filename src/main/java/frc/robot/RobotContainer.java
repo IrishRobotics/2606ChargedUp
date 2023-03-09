@@ -18,64 +18,64 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 
 //The Important One
 public class RobotContainer {
-  
 
-  //Controllers
+  // Controllers
   private CommandXboxController driveController = new CommandXboxController(Constants.XboxControllerPortDrive);
   private CommandXboxController armController = new CommandXboxController(Constants.XboxControllerPortArm);
 
-  //Subsystems
+  // Subsystems
   private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
   public final Drive m_Drive = new Drive();
   private final ArmSub m_UpperArm = new ArmSub(Constants.UPPERARM);
   private final ArmSub m_LowerArm = new ArmSub(Constants.LOWERARM);
   private final ClawSub m_Claw = new ClawSub(Constants.ClawChannel);
 
-  //Commands
+  // Commands
   private final ExampleCommand m_autoCommand = new ExampleCommand(m_exampleSubsystem);
- 
+
   public RobotContainer() {
-   
-    configureButtonBindings(); //Kinda obvious what this does
 
-    //Drive Command
-    m_Drive.setDefaultCommand(new RunCommand(()->{
-       m_Drive.updateDrive(-driveController.getLeftY(),-driveController.getLeftX(),driveController.getRightX(),false);
-    },m_Drive));
+    configureButtonBindings(); // Kinda obvious what this does
 
+    // Drive Command
+    m_Drive.setDefaultCommand(new RunCommand(() -> {
+      m_Drive.updateDrive(-driveController.getLeftY(), -driveController.getLeftX(), driveController.getRightX(), false);
+    }, m_Drive));
 
-    //Lower Arm Control Command
-    m_LowerArm.setDefaultCommand(new RunCommand(()->{
+    // Lower Arm Control Command
+    m_LowerArm.setDefaultCommand(new RunCommand(() -> {
       m_LowerArm.updateArm(armController.getLeftY());
     }, m_LowerArm));
 
-    
-    //Upper Arm Control Command
-    m_UpperArm.setDefaultCommand(new RunCommand(()->{
+    // Upper Arm Control Command
+    m_UpperArm.setDefaultCommand(new RunCommand(() -> {
       m_UpperArm.updateArm(armController.getRightY());
     }, m_UpperArm));
 
   }
 
-  //It does what it says it does :Man_Shrugging:
+  // It does what it says it does :Man_Shrugging:
   private void configureButtonBindings() {
-    //Sprint Button
-    driveController.b().onTrue(new RunCommand(()->{
+    // Sprint Button
+    driveController.b().onTrue(new RunCommand(() -> {
       m_Drive.setDriveMode(Constants.driveSpeedKillSprint);
-    },m_Drive));
-    driveController.b().onFalse(new RunCommand(()->{
+    }, m_Drive));
+    driveController.b().onFalse(new RunCommand(() -> {
       m_Drive.setDriveMode(Constants.driveSpeedKillDefault);
     }, m_Drive));
 
-    //Crouch Button
-    driveController.x().onTrue(new RunCommand(()->{
+    // Crouch Button
+    driveController.x().onTrue(new RunCommand(() -> {
       m_Drive.setDriveMode(Constants.driveSpeedKillCrouch);
-    },m_Drive));
-    driveController.x().onFalse(new RunCommand(()->{
+    }, m_Drive));
+    driveController.x().onFalse(new RunCommand(() -> {
       m_Drive.setDriveMode(Constants.driveSpeedKillDefault);
     }, m_Drive));
 
-    armController.b().onTrue(new ArmPID(Constants.lowerArmLowGoalAng, m_LowerArm).alongWith(new ArmPID(Constants.upperArmLowGoalAng,m_UpperArm)).andThen(()->{m_Claw.setSolenoid(true);}, m_Claw));
+    armController.b().onTrue(new ArmPID(Constants.lowerArmLowGoalAng, m_LowerArm)
+        .alongWith(new ArmPID(Constants.upperArmLowGoalAng, m_UpperArm)).andThen(() -> {
+          m_Claw.setSolenoid(true);
+        }, m_Claw));
 
   }
 
@@ -84,7 +84,7 @@ public class RobotContainer {
    *
    * @return the command to run in autonomous
    */
-  public Command getAutonomousCommand() { //Prolly need to do this...
+  public Command getAutonomousCommand() { // Prolly need to do this...
     // An ExampleCommand will run in autonomous
     return m_autoCommand;
   }

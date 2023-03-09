@@ -12,13 +12,13 @@ public class ArmPID extends PIDCommand {
    * Turns to robot to the specified angle.
    *
    * @param targetAngleDegrees The angle to turn to
-   * @param drive The drive subsystem to use
+   * @param drive              The drive subsystem to use
    */
-  public ArmPID(double targetAngleDegrees,ArmSub  arm) {
+  public ArmPID(double targetAngleDegrees, ArmSub arm) {
     super(
         new PIDController(Constants.kPArm, Constants.kIArm, Constants.kDArm),
         // Close loop on heading
-        arm :: getAngle,
+        arm::getAngle,
         // Set reference to target
         targetAngleDegrees,
         // Pipe output to turn robot
@@ -28,7 +28,8 @@ public class ArmPID extends PIDCommand {
 
     // Set the controller to be continuous (because it is an angle controller)
     getController().enableContinuousInput(-180, 180);
-    // Set the controller tolerance - the delta tolerance ensures the robot is stationary at the
+    // Set the controller tolerance - the delta tolerance ensures the robot is
+    // stationary at the
     // setpoint before it is considered as having reached the reference
     getController()
         .setTolerance(Constants.kPosTolArm, Constants.kVelTolArm);
