@@ -4,6 +4,12 @@
 
 package frc.robot;
 
+import edu.wpi.first.math.geometry.Rotation3d;
+import edu.wpi.first.math.geometry.Transform3d;
+import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.geometry.Translation3d;
+import edu.wpi.first.math.kinematics.MecanumDriveKinematics;
+
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide
  * numerical or boolean
@@ -23,9 +29,31 @@ public final class Constants {
     public static final int BLSPARK = 15;
     public static final int FLSPARK = 12;
 
+    // Drive kinie poo
+    /*
+     * front Left X/Y: .42,.1
+     * front Right X/Y: .075,.1
+     * back Left X/Y: .42,.41
+     * back Right x/Y:.075,.41
+     */
+    public static final MecanumDriveKinematics mecanumKinie = new MecanumDriveKinematics(new Translation2d(.42,.1),new Translation2d(.075,.1),new Translation2d(.42,.41),new Translation2d(.075,.41));
+
     // Controller ports
     public static final int XboxControllerPortDrive = 0;
     public static final int XboxControllerPortArm = 1;
+
+    // DeadBand && outputs
+    public static double kDeadband = 0.1;
+    public static double kMaxOutput = 4;
+    public static boolean kGyroReversed = false;
+
+    // Encoder stuff
+    public static double wheelDiameter = 0.2032;
+    public static double gearRatio=10.71;
+    public static double countsPerRev = 42;
+    public static final double kEncoderDistancePerPulseMeters =
+    (wheelDiameter * Math.PI) / countsPerRev * gearRatio;
+
 
     // Variable Drive Speeds
     public static final double driveSpeedKillDefault = .5;
@@ -53,6 +81,9 @@ public final class Constants {
 
     // Claw Solenoid Port
     public static final int ClawChannel = 0;
+    
+    //Camera stuff
+    public static Transform3d robotToCam = new Transform3d(new Translation3d(0,0,0),new Rotation3d());
 
     // goinkers
     // ploinkers
