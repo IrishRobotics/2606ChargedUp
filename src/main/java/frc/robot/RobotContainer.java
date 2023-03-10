@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.commands.ArmPID;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.subsystems.Drive;
+import frc.robot.subsystems.AdvancedDrive;
 import frc.robot.subsystems.ArmSub;
 import frc.robot.subsystems.ClawSub;
 import frc.robot.subsystems.ExampleSubsystem;
@@ -25,10 +26,11 @@ public class RobotContainer {
 
   // Subsystems
   private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
-  public final Drive m_Drive = new Drive();
+  //public final Drive m_Drive = new Drive();
   private final ArmSub m_UpperArm = new ArmSub(Constants.UPPERARM);
   private final ArmSub m_LowerArm = new ArmSub(Constants.LOWERARM);
   private final ClawSub m_Claw = new ClawSub(Constants.ClawChannel);
+  private final AdvancedDrive m_Drive2 = new AdvancedDrive();
 
   // Commands
   private final ExampleCommand m_autoCommand = new ExampleCommand(m_exampleSubsystem);
@@ -37,10 +39,15 @@ public class RobotContainer {
 
     configureButtonBindings(); // Kinda obvious what this does
 
-    // Drive Command
-    m_Drive.setDefaultCommand(new RunCommand(() -> {
-      m_Drive.updateDrive(-driveController.getLeftY(), -driveController.getLeftX(), driveController.getRightX(), false);
-    }, m_Drive));
+    // Drive Command -- basic
+    // m_Drive.setDefaultCommand(new RunCommand(() -> {
+    //   m_Drive.updateDrive(-driveController.getLeftY(), -driveController.getLeftX(), driveController.getRightX(), false);
+    // }, m_Drive));
+
+    // Drive Command -- advanced
+    m_Drive2.setDefaultCommand(new RunCommand(()->{
+      m_Drive2.drive(driveController.getLeftX(), driveController.getLeftY(), driveController.getRightX(),true);
+    }, m_Drive2));
 
     // Lower Arm Control Command
     m_LowerArm.setDefaultCommand(new RunCommand(() -> {
@@ -57,7 +64,7 @@ public class RobotContainer {
   // It does what it says it does :Man_Shrugging:
   private void configureButtonBindings() {
     // Sprint Button
-    driveController.b().onTrue(new RunCommand(() -> {
+    /*driveController.b().onTrue(new RunCommand(() -> {
       m_Drive.setDriveMode(Constants.driveSpeedKillSprint);
     }, m_Drive));
     driveController.b().onFalse(new RunCommand(() -> {
@@ -71,7 +78,7 @@ public class RobotContainer {
     driveController.x().onFalse(new RunCommand(() -> {
       m_Drive.setDriveMode(Constants.driveSpeedKillDefault);
     }, m_Drive));
-
+*/
     armController.b().onTrue(new ArmPID(Constants.lowerArmLowGoalAng, m_LowerArm)
         .alongWith(new ArmPID(Constants.upperArmLowGoalAng, m_UpperArm)).andThen(() -> {
           m_Claw.setSolenoid(true);

@@ -4,15 +4,22 @@
 
 package frc.robot.subsystems;
 
+import java.util.Optional;
+
+import org.photonvision.EstimatedRobotPose;
+
 import com.kauailabs.navx.frc.AHRS;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.wpilibj.drive.MecanumDrive;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.PhotonCameraWrapper;
+import edu.wpi.first.math.estimator.MecanumDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.MecanumDriveMotorVoltages;
@@ -41,15 +48,31 @@ public class AdvancedDrive extends SubsystemBase {
   // Gyro
   private final AHRS m_navX2 = new AHRS(SPI.Port.kMXP);
 
+  private final MecanumDrivePoseEstimator m_poseEstimator;
+
+  public PhotonCameraWrapper pcw;
+  private final Field2d m_fieldSim;
+  // private final DifferentialDrivetrainSim m_drivetrainSimulator =
+  //           new DifferentialDrivetrainSim(
+  //                   m_drivetrainSystem,
+  //                   DCMotor.getCIM(2),
+  //                   8,
+  //                   DriveTrainConstants.kTrackWidth,
+  //                   DriveTrainConstants.kWheelRadius,
+  //                   null); ---------------------------NO MACANUM EQUIVALANT OF DIFFERENTIALDRIVESIM
+
   // Odometry class for tracking robot pose
   MecanumDriveOdometry m_odometry =
       new MecanumDriveOdometry(
-          DriveConstants.kDriveKinematics,
+          Constants.mecanumKinie,
           m_navX2.getRotation2d(),
           new MecanumDriveWheelPositions());
 
   /** Creates a new ExampleSubsystem. */
   public AdvancedDrive() {
+    pcw=new PhotonCameraWrapper();
+    m_fieldSim = new Field2d();
+    SmartDashboard.putData("Field", m_fieldSim);
     // set invert the right side
     frontRightMotor.setInverted(true);
     rearRightMotor.setInverted(true);
@@ -63,20 +86,48 @@ public class AdvancedDrive extends SubsystemBase {
     // Sets the distance per pulse for the encoders
     // so we don't have to multiply the conversion factor each time we get the encoder's values
     // Note that the distance is in meter because odometer use meter unit
-    m_frontLeftEncoder.setPositionConversionFactor(DriveConstants.kEncoderDistancePerPulseMeters);
-    m_rearLeftEncoder.setPositionConversionFactor(DriveConstants.kEncoderDistancePerPulseMeters);
-    m_frontRightEncoder.setPositionConversionFactor(DriveConstants.kEncoderDistancePerPulseMeters);
-    m_rearRightEncoder.setPositionConversionFactor(DriveConstants.kEncoderDistancePerPulseMeters);
+    m_frontLeftEncoder.setPositionConversionFactor(Constants.kEncoderDistancePerPulseMeters);
+    m_rearLeftEncoder.setPositionConversionFactor(Constants.kEncoderDistancePerPulseMeters);
+    m_frontRightEncoder.setPositionConversionFactor(Constants.kEncoderDistancePerPulseMeters);
+    m_rearRightEncoder.setPositionConversionFactor(Constants.kEncoderDistancePerPulseMeters);
 
     resetEncoders();
     resetGyro();
 
+    m_poseEstimator =
+  new MecanumDrivePoseEstimator(
+          Constants.mecanumKinie, m_navX2.getRotation2d(), getCurrentWheelDistances(), new Pose2d());
   }
 
   @Override
   public void periodic() {
-    m_odometry.update(m_navX2.getRotation2d(), getCurrentWheelDistances());
+   // m_odometry.update(m_navX2.getRotation2d(), getCurrentWheelDistances());
+    updateOdometry();
+
+
   }
+
+  public void updateOdometry() {
+    m_poseEstimator.update(
+            m_navX2.getRotation2d(),getCurrentWheelDistances());
+
+    Optional<EstimatedRobotPose> result =
+            pcw.getEstimatedGlobalPose(m_poseEstimator.getEstimatedPosition());
+
+    if (result.isPresent()) {
+        EstimatedRobotPose camPose = result.get();
+        m_poseEstimator.addVisionMeasurement(
+                camPose.estimatedPose.toPose2d(), camPose.timestampSeconds);
+        m_fieldSim.getObject("Cam Est Pos").setPose(camPose.estimatedPose.toPose2d());
+    } else {
+        // move it way off the screen to make it disappear
+        m_fieldSim.getObject("Cam Est Pos").setPose(new Pose2d(-100, -100, new Rotation2d()));
+    }
+
+   // m_fieldSim.getObject("Actual Pos").setPose(m_drivetrainSimulator.getPose());
+    m_fieldSim.setRobotPose(m_poseEstimator.getEstimatedPosition());
+  
+}
 
   @Override
   public void simulationPeriodic() {
@@ -90,8 +141,11 @@ public class AdvancedDrive extends SubsystemBase {
   }
 
   // use 4 parameters for field-centric control
-  public void drive(double xSpeed, double ySpeed, double rot, Rotation2d gyroAngle) {
-    m_drive.driveCartesian(xSpeed, ySpeed *1.05, rot, gyroAngle);
+  public void drive(double xSpeed, double ySpeed, double rot, boolean useGyro) {
+    if(useGyro)
+     m_drive.driveCartesian(xSpeed, ySpeed *1.05, rot, m_navX2.getRotation2d());
+    else
+      m_drive.driveCartesian(xSpeed, ySpeed *1.05, rot);
   }
 
   public MecanumDrive getMecanumDrive(){
