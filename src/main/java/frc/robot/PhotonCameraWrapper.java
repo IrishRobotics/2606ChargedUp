@@ -35,6 +35,8 @@
  import org.photonvision.PhotonCamera;
  import org.photonvision.PhotonPoseEstimator;
  import org.photonvision.PhotonPoseEstimator.PoseStrategy;
+import org.photonvision.targeting.PhotonPipelineResult;
+import org.photonvision.targeting.PhotonTrackedTarget;
  
  public class PhotonCameraWrapper {
      private PhotonCamera photonCamera;
@@ -43,6 +45,7 @@
      public PhotonCameraWrapper() {
          // Change the name of your camera here to whatever it is in the PhotonVision UI.
          photonCamera = new PhotonCamera("apriltag");
+        // System.out.println("\n\n\n\n\nTHISS\n\n\n\nTHISS\nTHISS\nTHISS\nTHISS\nTHISS\nTHISS\n\n");
  
          try {
              // Attempt to load the AprilTagFieldLayout that will tell us where the tags are on the field.
@@ -72,5 +75,29 @@
          }
          photonPoseEstimator.setReferencePose(prevEstimatedRobotPose);
          return photonPoseEstimator.update();
+     }
+
+
+     public PhotonTrackedTarget getClosestTarget(){
+        PhotonPipelineResult result=photonCamera.getLatestResult();
+        if(result.hasTargets()){
+            PhotonTrackedTarget closestTarget = null;
+            double closestDist=0;
+            for(PhotonTrackedTarget cTarget:result.targets){
+                if(closestTarget==null){
+                    closestTarget=cTarget;
+                    closestDist=Math.abs(cTarget.getBestCameraToTarget().getY());
+                }else{
+                    double x = Math.abs(cTarget.getBestCameraToTarget().getY());
+                    if(x<closestDist){
+                        closestDist=x;
+                        closestTarget=cTarget;
+                    }
+                }
+            }
+            return closestTarget;
+        }else{
+            return null;
+        }
      }
  }

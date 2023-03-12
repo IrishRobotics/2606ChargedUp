@@ -16,6 +16,7 @@ import frc.robot.subsystems.ExampleSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import frc.robot.commands.AutoOutAlign;
 
 //The Important One
 public class RobotContainer {
@@ -34,6 +35,7 @@ public class RobotContainer {
 
   // Commands
   private final ExampleCommand m_autoCommand = new ExampleCommand(m_exampleSubsystem);
+  private final AutoOutAlign m_AutoOutAlignComm = new AutoOutAlign(m_Drive2);
 
   public RobotContainer() {
 
@@ -93,6 +95,6 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() { // Prolly need to do this...
     // An ExampleCommand will run in autonomous
-    return m_autoCommand;
+    return m_AutoOutAlignComm;
   }
 }
