@@ -82,7 +82,7 @@ public final class Constants {
     public static final double upperArmHighGoalAng = 0.0;
 
     // Arm PID Constants
-    public static final double kPArm = 0.3;
+    public static final double kPArm = 0.1;
     public static final double kIArm = 0.0;
     public static final double kDArm = 0.05;
 
