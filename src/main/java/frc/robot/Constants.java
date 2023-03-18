@@ -31,12 +31,12 @@ public final class Constants {
 
     // Drive kinie poo
     /*
-     * front Left X/Y: .42,.1
-     * front Right X/Y: .075,.1
-     * back Left X/Y: .42,.41
-     * back Right x/Y:.075,.41
+     * front Left X/Y: .41,.25
+     * front Right X/Y: .12,.25
+     * back Left X/Y: .41,.28
+     * back Right x/Y:.12,.28
      */
-    public static final MecanumDriveKinematics mecanumKinie = new MecanumDriveKinematics(new Translation2d(.42,.1),new Translation2d(.075,.1),new Translation2d(.42,.41),new Translation2d(.075,.41));
+    public static final MecanumDriveKinematics mecanumKinie = new MecanumDriveKinematics(new Translation2d(.42,.25),new Translation2d(.12,.25),new Translation2d(.41,.28),new Translation2d(.12,.28));
 
     // Controller ports
     public static final int XboxControllerPortDrive = 0;
@@ -68,22 +68,32 @@ public final class Constants {
     public static final double armSpeedKill = .35;
 
     // Arm Angle Pre-sets
+    public static final double lowerArmPickUpAng = 135.0;
+    public static final double upperArmPickUpAng = 45.0;
+    public static final double lowerArmDriveAng = 135.0;
+    public static final double upperArmDriveAng = 45.0;
+    public static final double lowerArmFullExtendAng = 135.0;
+    public static final double upperArmFullExtendAng = 0.0;
     public static final double lowerArmLowGoalAng = 0.0;
     public static final double upperArmLowGoalAng = 0.0;
+    public static final double lowerArmMidGoalAng = 0.0;
+    public static final double upperArmMidGoalAng = 0.0;
+    public static final double lowerArmHighGoalAng = 0.0;
+    public static final double upperArmHighGoalAng = 0.0;
 
     // Arm PID Constants
-    public static final double kPArm = 0.0;
+    public static final double kPArm = 0.3;
     public static final double kIArm = 0.0;
-    public static final double kDArm = 0.0;
+    public static final double kDArm = 0.05;
 
     public static final double kPosTolArm = 0.0;
     public static final double kVelTolArm = 0.0;
 
     // Claw Solenoid Port
-    public static final int ClawChannel = 0;
+    public static final int ClawChannel = 1;
     
     //Camera stuff
-    public static Transform3d robotToCam = new Transform3d(new Translation3d(0,0,0),new Rotation3d());
+    public static Transform3d robotToCam = new Transform3d(new Translation3d(.4,.08,.25),new Rotation3d());
 
     // goinkers
     // ploinkers

@@ -29,9 +29,9 @@ public class ClawSub extends SubsystemBase {
     // This method will be called once per scheduler run during simulation
   }
 
-  public boolean setSolenoid(boolean AHHHHHHHHHH) {
-    clawSolenoid.set(AHHHHHHHHHH);
-    state = AHHHHHHHHHH;
-    return AHHHHHHHHHH;
+  public boolean setSolenoid(boolean tset) {
+    clawSolenoid.set(tset);
+    state = tset;
+    return tset;
   }
 }

@@ -13,6 +13,7 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.wpilibj.drive.MecanumDrive;
+import edu.wpi.first.wpilibj.interfaces.Gyro;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
@@ -42,6 +43,8 @@ public class AdvancedDrive extends SubsystemBase {
   private final RelativeEncoder m_frontRightEncoder = frontRightMotor.getEncoder();
   private final RelativeEncoder m_rearRightEncoder = rearRightMotor.getEncoder();
 
+  private double speedMultiplier;
+
   // the robot's drive
   private final MecanumDrive m_drive = new MecanumDrive(frontLeftMotor, rearLeftMotor, frontRightMotor, rearRightMotor);
 
@@ -70,6 +73,8 @@ public class AdvancedDrive extends SubsystemBase {
 
   /** Creates a new ExampleSubsystem. */
   public AdvancedDrive() {
+    m_navX2.calibrate();
+    speedMultiplier=Constants.driveSpeedKillDefault;
     pcw=new PhotonCameraWrapper();
     m_fieldSim = new Field2d();
     SmartDashboard.putData("Field", m_fieldSim);
@@ -137,17 +142,23 @@ public class AdvancedDrive extends SubsystemBase {
   // Below are functions for Drive subsystem ====================================  
   // use 3 parameters for Robot-concentric control
   public void drive (double xSpeed, double ySpeed, double rot){
-    m_drive.driveCartesian(xSpeed, ySpeed *1.05, rot);
+    m_drive.driveCartesian(xSpeed*speedMultiplier, ySpeed *speedMultiplier, rot*speedMultiplier);
   }
 
   // use 4 parameters for field-centric control
   public void drive(double xSpeed, double ySpeed, double rot, boolean useGyro) {
-    if(useGyro)
-     m_drive.driveCartesian(xSpeed, ySpeed *1.05, rot, m_navX2.getRotation2d());
-    else
-      m_drive.driveCartesian(xSpeed, ySpeed *1.05, rot);
+   // drive(0,0,0);
+    
+     if(useGyro)
+      m_drive.driveCartesian(deadzone(xSpeed)*speedMultiplier, deadzone(ySpeed) *speedMultiplier, deadzone(rot)*speedMultiplier, m_navX2.getRotation2d());
+     else
+       m_drive.driveCartesian(deadzone(xSpeed)*speedMultiplier, deadzone(ySpeed) *speedMultiplier, deadzone(rot)*speedMultiplier);
   }
-
+  public double deadzone(double s){
+    if(Math.abs(s)<0.1)
+      return 0;
+    return s;
+  }
   public MecanumDrive getMecanumDrive(){
     return m_drive;
   }
@@ -265,6 +276,10 @@ public void setDriveMotorControllersVolts(MecanumDriveMotorVoltages volts) {
     resetEncoders();
     m_odometry.resetPosition(m_navX2.getRotation2d(), getCurrentWheelDistances(), pose);
   }
+
+public void setDriveMode(double drivespeedkillsprint) {
+
+}
 
 }
 

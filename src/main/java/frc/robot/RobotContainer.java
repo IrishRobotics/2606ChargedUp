@@ -6,6 +6,7 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.ArmPID;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.subsystems.Drive;
@@ -28,8 +29,8 @@ public class RobotContainer {
   // Subsystems
   private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
   //public final Drive m_Drive = new Drive();
-  private final ArmSub m_UpperArm = new ArmSub(Constants.UPPERARM);
-  private final ArmSub m_LowerArm = new ArmSub(Constants.LOWERARM);
+  private final ArmSub m_UpperArm = new ArmSub(Constants.UPPERARM, "E468A8969F1A5621");
+  private final ArmSub m_LowerArm = new ArmSub(Constants.LOWERARM, "E460BD10C32C3326");
   private final ClawSub m_Claw = new ClawSub(Constants.ClawChannel);
   private final AdvancedDrive m_Drive2 = new AdvancedDrive();
 
@@ -48,7 +49,7 @@ public class RobotContainer {
 
     // Drive Command -- advanced
     m_Drive2.setDefaultCommand(new RunCommand(()->{
-      m_Drive2.drive(driveController.getLeftX(), driveController.getLeftY(), driveController.getRightX(),true);
+      m_Drive2.drive(-driveController.getLeftY(), driveController.getLeftX(), driveController.getRightX(),false);
     }, m_Drive2));
 
     // Lower Arm Control Command
@@ -58,7 +59,7 @@ public class RobotContainer {
 
     // Upper Arm Control Command
     m_UpperArm.setDefaultCommand(new RunCommand(() -> {
-      m_UpperArm.updateArm(armController.getRightY());
+      m_UpperArm.updateArm(-armController.getRightY());
     }, m_UpperArm));
 
   }
@@ -66,25 +67,33 @@ public class RobotContainer {
   // It does what it says it does :Man_Shrugging:
   private void configureButtonBindings() {
     // Sprint Button
-    /*driveController.b().onTrue(new RunCommand(() -> {
-      m_Drive.setDriveMode(Constants.driveSpeedKillSprint);
-    }, m_Drive));
-    driveController.b().onFalse(new RunCommand(() -> {
-      m_Drive.setDriveMode(Constants.driveSpeedKillDefault);
-    }, m_Drive));
+    driveController.b().onTrue(new RunCommand(() -> {
+      m_Drive2.setDriveMode(Constants.driveSpeedKillSprint);
+    }, m_Drive2));
+    
 
     // Crouch Button
+    driveController.a().onTrue(new RunCommand(() -> {
+      m_Drive2.setDriveMode(Constants.driveSpeedKillCrouch);
+    }, m_Drive2));
+
+    // Normal speed button
     driveController.x().onTrue(new RunCommand(() -> {
-      m_Drive.setDriveMode(Constants.driveSpeedKillCrouch);
-    }, m_Drive));
-    driveController.x().onFalse(new RunCommand(() -> {
-      m_Drive.setDriveMode(Constants.driveSpeedKillDefault);
-    }, m_Drive));
-*/
-    armController.b().onTrue(new ArmPID(Constants.lowerArmLowGoalAng, m_LowerArm)
-        .alongWith(new ArmPID(Constants.upperArmLowGoalAng, m_UpperArm)).andThen(() -> {
-          m_Claw.setSolenoid(true);
-        }, m_Claw));
+      m_Drive2.setDriveMode(Constants.driveSpeedKillDefault);
+    }, m_Drive2));
+    
+
+    armController.b().onTrue(new ArmPID(Constants.lowerArmDriveAng, m_LowerArm)
+        .andThen(new ArmPID(Constants.upperArmDriveAng, m_UpperArm)));
+        
+    armController.a().onTrue(new ArmPID(Constants.lowerArmPickUpAng, m_LowerArm)
+        .andThen(new ArmPID(Constants.upperArmPickUpAng, m_UpperArm)));
+        
+    armController.x().onTrue(new ArmPID(Constants.lowerArmFullExtendAng, m_LowerArm)
+        .andThen(new ArmPID(Constants.upperArmFullExtendAng, m_UpperArm)));
+        
+        armController.rightBumper().onTrue(new RunCommand(()->{m_Claw.setSolenoid(true);}, m_Claw));
+        armController.leftBumper().onTrue(new RunCommand(()->{m_Claw.setSolenoid(false);}, m_Claw));
 
   }
 

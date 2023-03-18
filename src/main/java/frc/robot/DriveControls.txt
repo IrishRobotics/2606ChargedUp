@@ -1,0 +1,47 @@
+Main Drive Control -
+    Bound buttons - 
+        a -> Slowed drive --- Need Fixing -- Need Testing
+        b -> Turbo drive --- Need Fixing -- Need Testing
+        x -> Normal drive --- Need Testing
+        LeftStickX -> Strafe Left/Right --- Done -- Test with Gyro 
+        LeftStickY -> Forward/Backward --- Done -- Test with Gyro
+        RightStickX -> Rotate Robot --- Done -- test with Gyro 
+
+    Unbound buttons - 
+        
+        y ->
+        LeftBumper ->
+        LeftTrigger ->
+        RightBumper ->
+        RightTrigger ->
+        DPad-Up ->
+        DPad-Left ->
+        DPad-Down ->
+        DPad-Right ->
+        RightStickY ->
+        
+
+Secondary Arm Control -
+    Bound buttons - 
+        LeftStickY -> LowerArm Up/Down --- Done 
+        RightStickY -> UpperArm Up/Down --- Done
+        y -> ToggleClaw --- TODO
+        a -> ArmState pickUp --- TODO -- Test & set Angles in Constants
+        b -> ArmState drive --- TODO -- Test & set Angles in Constants
+        x -> ArmState extend --- TODO -- Test & set Angles in Constants
+        If Time Allotted -
+            DPad-Up -> ArmState upperGoal
+            DPad-Left -> ArmState middleGoal
+            DPad-Down -> ArmState lowerGoal
+
+
+    Unbound buttons - 
+        
+        LeftBumper ->
+        LeftTrigger ->
+        RightBumper ->
+        RightTrigger ->
+        DPad-Right ->
+        LeftStickX ->
+        RightStickX ->
+
