@@ -71,7 +71,7 @@ public final class Constants {
     public static final double lowerArmPickUpAng = 135.0;
     public static final double upperArmPickUpAng = 45.0;
     public static final double lowerArmDriveAng = 45.0;
-    public static final double upperArmDriveAng = 45.0;
+    public static final double upperArmDriveAng = 60.0;
     public static final double lowerArmFullExtendAng = 135.0;
     public static final double upperArmFullExtendAng = 0.0;
     public static final double lowerArmLowGoalAng = 0.0;
@@ -82,9 +82,9 @@ public final class Constants {
     public static final double upperArmHighGoalAng = 0.0;
 
     // Arm PID Constants
-    public static final double kPArm = 0.1;
+    public static final double kPArm = 0.05;
     public static final double kIArm = 0.0;
-    public static final double kDArm = 0.05;
+    public static final double kDArm = 0.01;
 
     public static final double kPosTolArm = 0.0;
     public static final double kVelTolArm = 0.0;
