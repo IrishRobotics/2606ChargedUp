@@ -13,7 +13,6 @@ import frc.robot.Constants;
 
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
-import com.fasterxml.jackson.annotation.JsonTypeInfo.Id;
 
 public class ArmSub extends SubsystemBase {
   /** Creates a new ExampleSubsystem. */
@@ -23,15 +22,25 @@ public class ArmSub extends SubsystemBase {
   NetworkTableInstance inst = NetworkTableInstance.getDefault();
   private String netGyro;
   private int Id;
+  private double upperLimit;
+  private double lowerLimit;
+  private double scaler;
 
-  public ArmSub(int ID, String netGyro) {
+  public ArmSub(int ID, String netGyro, double lowerLimit, double upperLimit, int scaler) {
     // Creates Talon Controller Supplied ID from constants through robot container
     armControl = new WPI_TalonSRX(ID);
     armControl.setNeutralMode(NeutralMode.Brake);
     this.netGyro = netGyro;
     initGyro(this.netGyro);
-    Id=ID;
+    Id = ID;
+    this.lowerLimit = lowerLimit;
+    this.upperLimit = upperLimit;
+    this.scaler = scaler;
+  }
 
+  public ArmSub(int ID, String netGyro) {
+    // Creates Talon Controller Supplied ID from constants through robot container
+    this(ID, netGyro, 0.0, 0.0, 0);
   }
 
   @Override
@@ -41,7 +50,7 @@ public class ArmSub extends SubsystemBase {
     } else {
       angle = roll.getDouble(0.0) + 180;// This method will be called once per scheduler run
     }
-    SmartDashboard.putNumber("angle "+Id, angle);
+    SmartDashboard.putNumber("angle " + Id, angle);
   }
 
   protected void initGyro(String name) {
@@ -61,9 +70,14 @@ public class ArmSub extends SubsystemBase {
   }
 
   public void updateArm(double d) { // Command for setting the speed for arms
-
+    if (((d * scaler) > 0) & (angle >= upperLimit)) {
+      return;
+    }
+    if (((d * scaler) < 0) & (angle <= lowerLimit)) {
+      return;
+    }
     armControl.set(d * Constants.armSpeedKill);
-    SmartDashboard.putNumber("MotorSpeed "+Id, d);
+    SmartDashboard.putNumber("MotorSpeed " + Id, d);
   }
 
   public double getAngle() {

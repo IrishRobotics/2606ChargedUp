@@ -70,7 +70,7 @@ public final class Constants {
     // Arm Angle Pre-sets
     public static final double lowerArmPickUpAng = 135.0;
     public static final double upperArmPickUpAng = 45.0;
-    public static final double lowerArmDriveAng = 135.0;
+    public static final double lowerArmDriveAng = 45.0;
     public static final double upperArmDriveAng = 45.0;
     public static final double lowerArmFullExtendAng = 135.0;
     public static final double upperArmFullExtendAng = 0.0;

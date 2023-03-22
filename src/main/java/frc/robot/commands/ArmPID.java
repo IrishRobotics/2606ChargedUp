@@ -14,7 +14,7 @@ public class ArmPID extends PIDCommand {
    * @param targetAngleDegrees The angle to turn to
    * @param drive              The drive subsystem to use
    */
-  public ArmPID(double targetAngleDegrees, ArmSub arm) {
+  public ArmPID(double targetAngleDegrees, ArmSub arm, double outputScaler) {
     super(
         new PIDController(Constants.kPArm, Constants.kIArm, Constants.kDArm),
         // Close loop on heading
@@ -22,7 +22,7 @@ public class ArmPID extends PIDCommand {
         // Set reference to target
         targetAngleDegrees,
         // Pipe output to turn robot
-        output -> arm.updateArm(output),
+        output -> arm.updateArm(outputScaler*output),
         // Require the drive
         arm);
 
