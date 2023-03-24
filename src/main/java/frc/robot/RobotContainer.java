@@ -30,7 +30,7 @@ public class RobotContainer {
   private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
   // public final Drive m_Drive = new Drive();
   private final ArmSub m_UpperArm = new ArmSub(Constants.UPPERARM, "E468A8969F1A5621");
-  private final ArmSub m_LowerArm = new ArmSub(Constants.LOWERARM, "E460BD10C32C3326", 45, 130, 1);
+  private final ArmSub m_LowerArm = new ArmSub(Constants.LOWERARM, "E460BD10C32C3326", 45, 130, 0); 
   private final ClawSub m_Claw = new ClawSub(Constants.ClawChannel);
   private final AdvancedDrive m_Drive2 = new AdvancedDrive();
 
@@ -56,7 +56,7 @@ public class RobotContainer {
     // Lower Arm Control Command
     m_LowerArm.setDefaultCommand(new RunCommand(() -> {
       m_LowerArm.updateArm(armController.getLeftY());
-    }, m_LowerArm));
+    }, m_LowerArm));//+Y is in -- meaning smaller angle
 
     // Upper Arm Control Command
     m_UpperArm.setDefaultCommand(new RunCommand(() -> {
@@ -82,14 +82,16 @@ public class RobotContainer {
       m_Drive2.setDriveMode(Constants.driveSpeedKillDefault);
     }, m_Drive2));
 
-    armController.b().onTrue(new ArmPID(Constants.lowerArmDriveAng, m_LowerArm, 1.0)
-        .andThen(new ArmPID(Constants.upperArmDriveAng, m_UpperArm, -1.0)));
+    // lowerArm outputScaler needs to be -1 i think some inverse relation
+    // upperArm outputScaler needs to be -1 upsidedown for angle
+    armController.b().onTrue(new ArmPID(Constants.lowerArmDriveAng, m_LowerArm, -1.0)
+        .andThen(new ArmPID(Constants.upperArmDriveAng, m_UpperArm, 1.0)));
 
-    armController.a().onTrue(new ArmPID(Constants.lowerArmPickUpAng, m_LowerArm, 1.0)
+    armController.a().onTrue(new ArmPID(Constants.lowerArmPickUpAng, m_LowerArm, -1.0)
         .andThen(new ArmPID(Constants.upperArmPickUpAng, m_UpperArm, -1.0)));
 
-    armController.x().onTrue(new ArmPID(Constants.lowerArmFullExtendAng, m_LowerArm, 1.0)
-        .andThen(new ArmPID(Constants.upperArmFullExtendAng, m_UpperArm, -1.0)));
+    armController.x().onTrue(new ArmPID(Constants.upperArmFullExtendAng, m_UpperArm, 1.0)
+        .andThen(new ArmPID(Constants.lowerArmFullExtendAng, m_LowerArm , -1.0)));
 
     armController.rightBumper().onTrue(new RunCommand(() -> {
       m_Claw.setSolenoid(true);

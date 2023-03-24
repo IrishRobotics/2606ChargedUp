@@ -3,9 +3,9 @@ Main Drive Control -
         a -> Slowed drive --- Need Fixing -- Need Testing
         b -> Turbo drive --- Need Fixing -- Need Testing
         x -> Normal drive --- Need Testing
-        LeftStickX -> Strafe Left/Right --- Done -- Test with Gyro 
-        LeftStickY -> Forward/Backward --- Done -- Test with Gyro
-        RightStickX -> Rotate Robot --- Done -- test with Gyro 
+        LeftStickX -> Strafe Left/Right --- Done -- Test with Gyro -- reconfigured gyro calibration TEST
+        LeftStickY -> Forward/Backward --- Done -- Test with Gyro -- reconfigured gyro calibration TEST
+        RightStickX -> Rotate Robot --- Done -- test with Gyro -- reconfigured gyro calibration TEST
 
     Unbound buttons - 
         
@@ -25,10 +25,11 @@ Secondary Arm Control -
     Bound buttons - 
         LeftStickY -> LowerArm Up/Down --- Done 
         RightStickY -> UpperArm Up/Down --- Done
-        y -> ToggleClaw --- TODO
-        a -> ArmState pickUp --- TODO -- Test & set Angles in Constants
-        b -> ArmState drive --- TODO -- Test & set Angles in Constants
-        x -> ArmState extend --- TODO -- Test & set Angles in Constants
+        a -> ArmState pickUp --- TODO -- Test & set Angles in Constants -- Fix PIDCommand (trial and error i think i need some negative somewhere)
+        b -> ArmState drive --- TODO -- Test & set Angles in Constants -- Fix PIDCommand (trial and error i think i need some negative somewhere)
+        x -> ArmState extend --- TODO -- Test & set Angles in Constants -- Fix PIDCommand (trial and error i think i need some negative somewhere)
+        RightBumper -> Open Claw --- Done
+        LeftBumper -> Close Claw --- Done
         If Time Allotted -
             DPad-Up -> ArmState upperGoal
             DPad-Left -> ArmState middleGoal
@@ -36,10 +37,8 @@ Secondary Arm Control -
 
 
     Unbound buttons - 
-        
-        LeftBumper ->
+        y ->
         LeftTrigger ->
-        RightBumper ->
         RightTrigger ->
         DPad-Right ->
         LeftStickX ->

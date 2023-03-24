@@ -8,6 +8,7 @@ import frc.robot.subsystems.Drive;
 
 /** A command that will turn the robot to the specified angle. */
 public class ArmPID extends PIDCommand {
+  boolean valid;
   /**
    * Turns to robot to the specified angle.
    *
@@ -26,6 +27,13 @@ public class ArmPID extends PIDCommand {
         // Require the drive
         arm);
 
+    if(targetAngleDegrees>arm.getLowerLimit()&&targetAngleDegrees<arm.getUpperLimit()){
+      valid=true;
+    }else{
+      valid=false;
+    }
+    
+
     // Set the controller to be continuous (because it is an angle controller)
     getController().enableContinuousInput(-180, 180);
     // Set the controller tolerance - the delta tolerance ensures the robot is
@@ -38,6 +46,9 @@ public class ArmPID extends PIDCommand {
   @Override
   public boolean isFinished() {
     // End when the controller is at the reference.
+    // if(!valid){
+    //   return true;
+    // }
     return getController().atSetpoint();
   }
 }

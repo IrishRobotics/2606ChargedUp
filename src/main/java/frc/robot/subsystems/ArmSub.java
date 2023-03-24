@@ -69,11 +69,15 @@ public class ArmSub extends SubsystemBase {
     // This method will be called once per scheduler run during simulation
   }
 
+  public double getLowerLimit(){return lowerLimit;}
+  public double getUpperLimit(){return upperLimit;}
+
   public void updateArm(double d) { // Command for setting the speed for arms
-    if (((d * scaler) > 0) & (angle >= upperLimit)) {
+    SmartDashboard.putNumber("SmartSpeed " + Id, d*scaler);
+    if (((d * scaler) > 0) && (angle >= upperLimit)) {
       return;
     }
-    if (((d * scaler) < 0) & (angle <= lowerLimit)) {
+    if (((d * scaler) < 0) && (angle <= lowerLimit)) {
       return;
     }
     armControl.set(d * Constants.armSpeedKill);
