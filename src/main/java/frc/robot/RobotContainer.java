@@ -5,6 +5,7 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.GenericHID;
+import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.ArmPID;
@@ -37,11 +38,14 @@ public class RobotContainer {
   // Commands
   private final ExampleCommand m_autoCommand = new ExampleCommand(m_exampleSubsystem);
   private final AutoOutAlign m_AutoOutAlignComm = new AutoOutAlign(m_Drive2);
+  private ArmPID p1;
+  private ArmPID p2;
 
   public RobotContainer() {
 
     configureButtonBindings(); // Kinda obvious what this does
-
+    PowerDistribution powerD = new PowerDistribution();
+    SmartDashboard.putData("PDH", powerD);
     // Drive Command -- basic
     // m_Drive.setDefaultCommand(new RunCommand(() -> {
     // m_Drive.updateDrive(-driveController.getLeftY(), -driveController.getLeftX(),
@@ -81,6 +85,11 @@ public class RobotContainer {
     driveController.x().onTrue(new RunCommand(() -> {
       m_Drive2.setDriveMode(Constants.driveSpeedKillDefault);
     }, m_Drive2));
+
+    p1 = new ArmPID(Constants.lowerArmDriveAng, m_LowerArm, -1.0);
+    p2 = new ArmPID(Constants.upperArmPickUpAng, m_UpperArm, 1.0);
+    SmartDashboard.putData("Lower Arm Test", p1);
+    SmartDashboard.putData("Upper Arm Test", p2);
 
     // lowerArm outputScaler needs to be -1 i think some inverse relation
     // upperArm outputScaler needs to be -1 upsidedown for angle

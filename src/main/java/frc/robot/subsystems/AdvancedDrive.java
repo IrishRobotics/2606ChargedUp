@@ -81,7 +81,7 @@ public class AdvancedDrive extends SubsystemBase {
     // set invert the right side
     frontRightMotor.setInverted(true);
     rearRightMotor.setInverted(true);
-
+    
     // set deadband
     m_drive.setDeadband(Constants.kDeadband);
 
@@ -102,6 +102,8 @@ public class AdvancedDrive extends SubsystemBase {
     m_poseEstimator =
   new MecanumDrivePoseEstimator(
           Constants.mecanumKinie, m_navX2.getRotation2d(), getCurrentWheelDistances(), new Pose2d());
+
+    
   }
 
   @Override

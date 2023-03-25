@@ -1,6 +1,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.PIDCommand;
 import frc.robot.Constants;
 import frc.robot.subsystems.ArmSub;
@@ -8,7 +9,9 @@ import frc.robot.subsystems.Drive;
 
 /** A command that will turn the robot to the specified angle. */
 public class ArmPID extends PIDCommand {
-  boolean valid;
+
+  private ArmSub arm;
+
   /**
    * Turns to robot to the specified angle.
    *
@@ -23,15 +26,10 @@ public class ArmPID extends PIDCommand {
         // Set reference to target
         targetAngleDegrees,
         // Pipe output to turn robot
-        output -> arm.updateArm(outputScaler*output),
+        output -> arm.updateArm(outputScaler * output),
         // Require the drive
         arm);
-
-    if(targetAngleDegrees>arm.getLowerLimit()&&targetAngleDegrees<arm.getUpperLimit()){
-      valid=true;
-    }else{
-      valid=false;
-    }
+    this.arm = arm;
     
 
     // Set the controller to be continuous (because it is an angle controller)
@@ -41,14 +39,19 @@ public class ArmPID extends PIDCommand {
     // setpoint before it is considered as having reached the reference
     getController()
         .setTolerance(Constants.kPosTolArm, Constants.kVelTolArm);
+
+    SmartDashboard.putData("PID "+arm.getId(), getController());
+  }
+
+  @Override
+  public void execute() {
+    SmartDashboard.putData("PID "+arm.getId(), getController());
+    arm.updateAngle();
+    super.execute();
   }
 
   @Override
   public boolean isFinished() {
-    // End when the controller is at the reference.
-    // if(!valid){
-    //   return true;
-    // }
     return getController().atSetpoint();
   }
 }
