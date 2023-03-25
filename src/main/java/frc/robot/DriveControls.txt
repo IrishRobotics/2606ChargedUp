@@ -2,13 +2,12 @@ Main Drive Control -
     Bound buttons - 
         a -> Slowed drive --- Need Fixing -- Need Testing
         b -> Turbo drive --- Need Fixing -- Need Testing
-        x -> Normal drive --- Need Testing
         LeftStickX -> Strafe Left/Right --- Done -- Test with Gyro -- reconfigured gyro calibration TEST
         LeftStickY -> Forward/Backward --- Done -- Test with Gyro -- reconfigured gyro calibration TEST
         RightStickX -> Rotate Robot --- Done -- test with Gyro -- reconfigured gyro calibration TEST
 
     Unbound buttons - 
-        
+        x ->
         y ->
         LeftBumper ->
         LeftTrigger ->

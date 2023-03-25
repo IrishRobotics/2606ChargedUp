@@ -57,7 +57,7 @@ public final class Constants {
 
     // Variable Drive Speeds
     public static final double driveSpeedKillDefault = .5;
-    public static final double driveSpeedKillCrouch = .1;
+    public static final double driveSpeedKillCrouch = .2;
     public static final double driveSpeedKillSprint = 1;
 
     // CAN ID's for Arm Segments
@@ -73,7 +73,7 @@ public final class Constants {
     public static final double lowerArmDriveAng = 45.0;
     public static final double upperArmDriveAng = 60.0;
     public static final double lowerArmFullExtendAng = 90.0;
-    public static final double upperArmFullExtendAng = 45.0;
+    public static final double upperArmFullExtendAng = 5.0;
     public static final double lowerArmLowGoalAng = 0.0;
     public static final double upperArmLowGoalAng = 0.0;
     public static final double lowerArmMidGoalAng = 0.0;
@@ -82,7 +82,7 @@ public final class Constants {
     public static final double upperArmHighGoalAng = 0.0;
 
     // Arm PID Constants
-    public static final double kPArm = 0.05;
+    public static final double kPArm = 0.02;
     public static final double kIArm = 0.0;
     public static final double kDArm = 0.04;
 
@@ -94,6 +94,10 @@ public final class Constants {
     
     //Camera stuff
     public static Transform3d robotToCam = new Transform3d(new Translation3d(.4,.08,.25),new Rotation3d());
+
+    //Auto Stuff
+    public static int AutoFeducial = 8;
+    public static double AutoSpeed = 0.5;
 
     // goinkers
     // ploinkers

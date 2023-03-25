@@ -3,6 +3,7 @@ package frc.robot.commands;
 import org.photonvision.targeting.PhotonTrackedTarget;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.Constants;
 import frc.robot.PhotonCameraWrapper;
 import frc.robot.subsystems.AdvancedDrive;
 
@@ -19,7 +20,7 @@ public class AutoOutAlign extends CommandBase{
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
-        drive.drive(-1, 0, 0, true); 
+        drive.drive(-Constants.AutoSpeed, 0, 0, false); 
     
     }
   
@@ -32,6 +33,12 @@ public class AutoOutAlign extends CommandBase{
     @Override
     public boolean isFinished() {
         PhotonTrackedTarget closest = pcw.getClosestTarget();
-      return Math.abs(closest.getBestCameraToTarget().getX())<0.5;
-    }
+        if(closest!=null){
+            if(closest.getFiducialId()==Constants.AutoFeducial){
+                return Math.abs(closest.getBestCameraToTarget().getX())<0.5;
+            }
+        }
+    return false;    
+}
+
 }

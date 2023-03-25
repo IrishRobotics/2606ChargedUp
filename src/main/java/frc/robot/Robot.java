@@ -26,6 +26,7 @@ public class Robot extends TimedRobot {
 
 
   private CommandXboxController armController = new CommandXboxController(Constants.XboxControllerPortArm);
+  private CommandXboxController driveController = new CommandXboxController(Constants.XboxControllerPortDrive);
 
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -51,8 +52,16 @@ public class Robot extends TimedRobot {
     // commands, running already-scheduled commands, removing finished or interrupted commands,
     // and running subsystem periodic() methods.  This must be called from the robot's periodic
     // block in order for anything in the Command-based framework to work.
-    SmartDashboard.putBoolean("X state", armController.x().getAsBoolean());
+    
     CommandScheduler.getInstance().run();
+
+     if(driveController.a().getAsBoolean()){
+      m_robotContainer.passSpeed(Constants.driveSpeedKillCrouch);
+     }  else if(driveController.b().getAsBoolean()){
+      m_robotContainer.passSpeed(Constants.driveSpeedKillSprint);
+     } else{
+      m_robotContainer.passSpeed(Constants.driveSpeedKillDefault);
+     }
   }
 
   /** This function is called once each time the robot enters Disabled mode. */

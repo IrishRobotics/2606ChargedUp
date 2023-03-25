@@ -31,8 +31,10 @@ public class ArmSub extends SubsystemBase {
   private double m_lastUpdate;
   private int dioPort;
   private DigitalInput input;
+  private int dioPort2;
+  private DigitalInput input2;
 
-  public ArmSub(int ID, String netGyro, double lowerLimit, double upperLimit, int scaler, int dioPort) {
+  public ArmSub(int ID, String netGyro, double lowerLimit, double upperLimit, int scaler, int dioPort, int dioPort2) {
     // Creates Talon Controller Supplied ID from constants through robot container
     super();
     armControl = new WPI_TalonSRX(ID);
@@ -46,16 +48,21 @@ public class ArmSub extends SubsystemBase {
     SmartDashboard.putData("ARM"+ID, this);
     SmartDashboard.putData("ARM MOTOR"+ID,armControl);
     this.dioPort = dioPort;
+    this.dioPort2 = dioPort2;
     if(dioPort!=-1) {
       input = new DigitalInput(dioPort);
       SmartDashboard.putData("LIMIT", input);
+    }
+    if(dioPort!=-1) {
+      input2 = new DigitalInput(dioPort2);
+      SmartDashboard.putData("LIMIT", input2);
     }
     
   }
 
   public ArmSub(int ID, String netGyro) {
     // Creates Talon Controller Supplied ID from constants through robot container
-    this(ID, netGyro, 0.0, 0.0, 0,-1 );
+    this(ID, netGyro, 0.0, 0.0, 0,-1,-1 );
   }
 
   public int getId() {
@@ -116,6 +123,11 @@ public class ArmSub extends SubsystemBase {
     }
     if(dioPort!=-1) {
       if (input.get() && d<0 ) {
+        d=0;
+      }
+    }
+    if(dioPort2!=-1) {
+      if (input2.get() && d>0 ) {
         d=0;
       }
     }
