@@ -149,12 +149,12 @@ public class AdvancedDrive extends SubsystemBase {
 
   // use 4 parameters for field-centric control
   public void drive(double xSpeed, double ySpeed, double rot, boolean useGyro) {
-    drive(0,0,0);
+    //drive(0,0,0);
     
-  //    if(useGyro)
-  //     m_drive.driveCartesian(deadzone(xSpeed)*speedMultiplier, deadzone(ySpeed) *speedMultiplier, deadzone(rot)*speedMultiplier, m_navX2.getRotation2d());
-  //    else
-  //      m_drive.driveCartesian(deadzone(xSpeed)*speedMultiplier, deadzone(ySpeed) *speedMultiplier, deadzone(rot)*speedMultiplier);
+      if(useGyro)
+       m_drive.driveCartesian(deadzone(xSpeed)*speedMultiplier, deadzone(ySpeed) *speedMultiplier, deadzone(rot)*speedMultiplier, m_navX2.getRotation2d());
+      else
+        m_drive.driveCartesian(deadzone(xSpeed)*speedMultiplier, deadzone(ySpeed) *speedMultiplier, deadzone(rot)*speedMultiplier);
    }
   public double deadzone(double s){
     if(Math.abs(s)<0.1)
@@ -280,7 +280,7 @@ public void setDriveMotorControllersVolts(MecanumDriveMotorVoltages volts) {
   }
 
 public void setDriveMode(double drivespeedkillsprint) {
-
+  speedMultiplier=drivespeedkillsprint;
 }
 
 }

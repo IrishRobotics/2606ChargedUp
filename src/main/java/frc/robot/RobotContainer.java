@@ -4,6 +4,8 @@
 
 package frc.robot;
 
+import edu.wpi.first.cameraserver.CameraServer;
+import edu.wpi.first.cscore.UsbCamera;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.XboxController;
@@ -31,7 +33,7 @@ public class RobotContainer {
   private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
   // public final Drive m_Drive = new Drive();
   private final ArmSub m_UpperArm = new ArmSub(Constants.UPPERARM, "E468A8969F1A5621");
-  private final ArmSub m_LowerArm = new ArmSub(Constants.LOWERARM, "E460BD10C32C3326", 45, 130, 0); 
+  private final ArmSub m_LowerArm = new ArmSub(Constants.LOWERARM, "E460BD10C32C3326", 45, 130, 0, 8); 
   private final ClawSub m_Claw = new ClawSub(Constants.ClawChannel);
   private final AdvancedDrive m_Drive2 = new AdvancedDrive();
 
@@ -86,14 +88,18 @@ public class RobotContainer {
       m_Drive2.setDriveMode(Constants.driveSpeedKillDefault);
     }, m_Drive2));
 
-    p1 = new ArmPID(Constants.lowerArmDriveAng, m_LowerArm, -1.0);
-    p2 = new ArmPID(Constants.upperArmPickUpAng, m_UpperArm, 1.0);
+    p1 = new ArmPID(Constants.lowerArmDriveAng, m_LowerArm, 1);
+    p2 = new ArmPID(Constants.upperArmPickUpAng, m_UpperArm, -1.0);
     SmartDashboard.putData("Lower Arm Test", p1);
     SmartDashboard.putData("Upper Arm Test", p2);
 
+    UsbCamera camera = CameraServer.startAutomaticCapture();
+    // Set the resolution
+    camera.setResolution(320, 240);
+
     // lowerArm outputScaler needs to be -1 i think some inverse relation
     // upperArm outputScaler needs to be -1 upsidedown for angle
-    armController.b().onTrue(new ArmPID(Constants.lowerArmDriveAng, m_LowerArm, -1.0)
+    /*armController.b().onTrue(new ArmPID(Constants.lowerArmDriveAng, m_LowerArm, -1.0)
         .andThen(new ArmPID(Constants.upperArmDriveAng, m_UpperArm, 1.0)));
 
     armController.a().onTrue(new ArmPID(Constants.lowerArmPickUpAng, m_LowerArm, -1.0)
@@ -101,7 +107,7 @@ public class RobotContainer {
 
     armController.x().onTrue(new ArmPID(Constants.upperArmFullExtendAng, m_UpperArm, 1.0)
         .andThen(new ArmPID(Constants.lowerArmFullExtendAng, m_LowerArm , -1.0)));
-
+*/
     armController.rightBumper().onTrue(new RunCommand(() -> {
       m_Claw.setSolenoid(true);
     }, m_Claw));

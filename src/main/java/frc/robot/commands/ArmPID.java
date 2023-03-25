@@ -30,7 +30,6 @@ public class ArmPID extends PIDCommand {
         // Require the drive
         arm);
     this.arm = arm;
-    
 
     // Set the controller to be continuous (because it is an angle controller)
     getController().enableContinuousInput(-180, 180);
@@ -40,12 +39,12 @@ public class ArmPID extends PIDCommand {
     getController()
         .setTolerance(Constants.kPosTolArm, Constants.kVelTolArm);
 
-    SmartDashboard.putData("PID "+arm.getId(), getController());
+    SmartDashboard.putData("PID " + arm.getId(), getController());
   }
 
   @Override
   public void execute() {
-    SmartDashboard.putData("PID "+arm.getId(), getController());
+    SmartDashboard.putData("PID " + arm.getId(), getController());
     arm.updateAngle();
     super.execute();
   }

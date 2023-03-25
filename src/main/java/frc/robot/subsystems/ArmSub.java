@@ -9,6 +9,7 @@ import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.util.sendable.Sendable;
 import edu.wpi.first.util.sendable.SendableBuilder;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -28,8 +29,10 @@ public class ArmSub extends SubsystemBase {
   private double lowerLimit;
   private double scaler;
   private double m_lastUpdate;
+  private int dioPort;
+  private DigitalInput input;
 
-  public ArmSub(int ID, String netGyro, double lowerLimit, double upperLimit, int scaler) {
+  public ArmSub(int ID, String netGyro, double lowerLimit, double upperLimit, int scaler, int dioPort) {
     // Creates Talon Controller Supplied ID from constants through robot container
     super();
     armControl = new WPI_TalonSRX(ID);
@@ -42,11 +45,17 @@ public class ArmSub extends SubsystemBase {
     this.scaler = scaler;
     SmartDashboard.putData("ARM"+ID, this);
     SmartDashboard.putData("ARM MOTOR"+ID,armControl);
+    this.dioPort = dioPort;
+    if(dioPort!=-1) {
+      input = new DigitalInput(dioPort);
+      SmartDashboard.putData("LIMIT", input);
+    }
+    
   }
 
   public ArmSub(int ID, String netGyro) {
     // Creates Talon Controller Supplied ID from constants through robot container
-    this(ID, netGyro, 0.0, 0.0, 0);
+    this(ID, netGyro, 0.0, 0.0, 0,-1 );
   }
 
   public int getId() {
@@ -98,14 +107,20 @@ public class ArmSub extends SubsystemBase {
   public double getUpperLimit(){return upperLimit;}
 
   public void updateArm(double d) { // Command for setting the speed for arms
-    m_lastUpdate=d;
+    
     if (((d * scaler) > 0) && (angle >= upperLimit)) {
       d=0;
     }
     if (((d * scaler) < 0) && (angle <= lowerLimit)) {
       d=0;
     }
+    if(dioPort!=-1) {
+      if (input.get() && d<0 ) {
+        d=0;
+      }
+    }
     double update = d * Constants.armSpeedKill;
+    m_lastUpdate=d;
     armControl.set(update);
     SmartDashboard.putNumber("MotorSpeed " + Id, update);
   }

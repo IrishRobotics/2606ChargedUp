@@ -84,7 +84,7 @@ public final class Constants {
     // Arm PID Constants
     public static final double kPArm = 0.05;
     public static final double kIArm = 0.0;
-    public static final double kDArm = 0.01;
+    public static final double kDArm = 0.04;
 
     public static final double kPosTolArm = 2.5;
     public static final double kVelTolArm = 4.0;
