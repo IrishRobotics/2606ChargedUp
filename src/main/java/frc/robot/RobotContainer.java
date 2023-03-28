@@ -34,7 +34,7 @@ public class RobotContainer {
   private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
   // public final Drive m_Drive = new Drive();
   private final ArmSub m_UpperArm = new ArmSub(Constants.UPPERARM, "E468A8969F1A5621");
-  private final ArmSub m_LowerArm = new ArmSub(Constants.LOWERARM, "E460BD10C32C3326", 45, 130, 0, 8,7); 
+  private final ArmSub m_LowerArm = new ArmSub(Constants.LOWERARM, "E460BD10C32C3326", 0, 8,7); 
   private final ClawSub m_Claw = new ClawSub(Constants.ClawChannel);
   private final AdvancedDrive m_Drive2 = new AdvancedDrive();
 

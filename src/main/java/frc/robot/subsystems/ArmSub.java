@@ -25,16 +25,13 @@ public class ArmSub extends SubsystemBase {
   NetworkTableInstance inst = NetworkTableInstance.getDefault();
   private String netGyro;
   private int Id;
-  private double upperLimit;
-  private double lowerLimit;
-  private double scaler;
   private double m_lastUpdate;
   private int dioPort;
   private DigitalInput input;
   private int dioPort2;
   private DigitalInput input2;
 
-  public ArmSub(int ID, String netGyro, double lowerLimit, double upperLimit, int scaler, int dioPort, int dioPort2) {
+  public ArmSub(int ID, String netGyro, int scaler, int dioPort, int dioPort2) {
     // Creates Talon Controller Supplied ID from constants through robot container
     super();
     armControl = new WPI_TalonSRX(ID);
@@ -42,9 +39,6 @@ public class ArmSub extends SubsystemBase {
     this.netGyro = netGyro;
     initGyro(this.netGyro);
     Id = ID;
-    this.lowerLimit = lowerLimit;
-    this.upperLimit = upperLimit;
-    this.scaler = scaler;
     SmartDashboard.putData("ARM"+ID, this);
     SmartDashboard.putData("ARM MOTOR"+ID,armControl);
     this.dioPort = dioPort;
@@ -62,7 +56,7 @@ public class ArmSub extends SubsystemBase {
 
   public ArmSub(int ID, String netGyro) {
     // Creates Talon Controller Supplied ID from constants through robot container
-    this(ID, netGyro, 0.0, 0.0, 0,-1,-1 );
+    this(ID, netGyro, 0,-1,-1 );
   }
 
   public int getId() {
@@ -71,16 +65,18 @@ public class ArmSub extends SubsystemBase {
 
   @Override
   public void periodic() {
-    updateAngle();
+    angle = updateAngle();
   }
 
-  public void updateAngle() {
+  public double updateAngle() {
+    double retVal=angle;
     if (roll == null) {
       this.initGyro(netGyro);
     } else {
-      angle = roll.getDouble(0.0) + 180;// This method will be called once per scheduler run
+      retVal = roll.getDouble(0.0) + 180;// This method will be called once per scheduler run
     }
-    SmartDashboard.putNumber("angle " + Id, angle);
+    SmartDashboard.putNumber("angle " + Id, retVal);
+    return retVal;
   }
 
   public double getLastUpdate() {
@@ -110,17 +106,8 @@ public class ArmSub extends SubsystemBase {
     // This method will be called once per scheduler run during simulation
   }
 
-  public double getLowerLimit(){return lowerLimit;}
-  public double getUpperLimit(){return upperLimit;}
-
   public void updateArm(double d) { // Command for setting the speed for arms
     
-    if (((d * scaler) > 0) && (angle >= upperLimit)) {
-      d=0;
-    }
-    if (((d * scaler) < 0) && (angle <= lowerLimit)) {
-      d=0;
-    }
     if(dioPort!=-1) {
       if (input.get() && d<0 ) {
         d=0;
@@ -139,5 +126,13 @@ public class ArmSub extends SubsystemBase {
 
   public double getAngle() {
     return angle;
+  }
+
+  public DigitalInput getLimit1() {
+    return input;
+  }
+
+  public DigitalInput getLimit2() {
+    return input2;
   }
 }

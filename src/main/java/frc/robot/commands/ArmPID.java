@@ -45,7 +45,7 @@ public class ArmPID extends PIDCommand {
   @Override
   public void execute() {
     SmartDashboard.putData("PID " + arm.getId(), getController());
-    arm.updateAngle();
+    arm.periodic();
     super.execute();
   }
 
