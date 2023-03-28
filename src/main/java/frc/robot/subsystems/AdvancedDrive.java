@@ -81,7 +81,7 @@ public class AdvancedDrive extends SubsystemBase {
     // set invert the right side
     frontRightMotor.setInverted(true);
     rearRightMotor.setInverted(true);
-
+    
     // set deadband
     m_drive.setDeadband(Constants.kDeadband);
 
@@ -102,6 +102,8 @@ public class AdvancedDrive extends SubsystemBase {
     m_poseEstimator =
   new MecanumDrivePoseEstimator(
           Constants.mecanumKinie, m_navX2.getRotation2d(), getCurrentWheelDistances(), new Pose2d());
+
+    
   }
 
   @Override
@@ -147,13 +149,14 @@ public class AdvancedDrive extends SubsystemBase {
 
   // use 4 parameters for field-centric control
   public void drive(double xSpeed, double ySpeed, double rot, boolean useGyro) {
-   // drive(0,0,0);
+    //drive(0,0,0);
+    SmartDashboard.putNumber("Robot actual X", deadzone(xSpeed)*speedMultiplier);
     
-     if(useGyro)
-      m_drive.driveCartesian(deadzone(xSpeed)*speedMultiplier, deadzone(ySpeed) *speedMultiplier, deadzone(rot)*speedMultiplier, m_navX2.getRotation2d());
-     else
-       m_drive.driveCartesian(deadzone(xSpeed)*speedMultiplier, deadzone(ySpeed) *speedMultiplier, deadzone(rot)*speedMultiplier);
-  }
+      if(useGyro)
+        m_drive.driveCartesian(deadzone(xSpeed)*speedMultiplier, deadzone(ySpeed) *speedMultiplier, deadzone(rot)*speedMultiplier*.5, m_navX2.getRotation2d());
+      else
+        m_drive.driveCartesian(deadzone(xSpeed)*speedMultiplier, deadzone(ySpeed) *speedMultiplier, deadzone(rot)*speedMultiplier*.5);
+   }
   public double deadzone(double s){
     if(Math.abs(s)<0.1)
       return 0;
@@ -278,7 +281,7 @@ public void setDriveMotorControllersVolts(MecanumDriveMotorVoltages volts) {
   }
 
 public void setDriveMode(double drivespeedkillsprint) {
-
+  speedMultiplier=drivespeedkillsprint;
 }
 
 }
