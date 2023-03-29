@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.ArmPID;
+import frc.robot.commands.LowerArmExtend;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.subsystems.Drive;
 import frc.robot.subsystems.AdvancedDrive;
@@ -42,7 +43,7 @@ public class RobotContainer {
   private final ExampleCommand m_autoCommand = new ExampleCommand(m_exampleSubsystem);
   private final AutoOutAlign m_AutoOutAlignComm = new AutoOutAlign(m_Drive2);
   private final DRIVEBACK m_Driveback = new DRIVEBACK(m_Drive2);
-  private ArmPID p1;
+  private LowerArmExtend p1;
   private ArmPID p2;
 
   public RobotContainer() {
@@ -90,10 +91,10 @@ public class RobotContainer {
     //   m_Drive2.setDriveMode(Constants.driveSpeedKillDefault);
     // }, m_Drive2));
 
-    p1 = new ArmPID(Constants.lowerArmDriveAng, m_LowerArm, 1);
+    p1 = new LowerArmExtend(m_LowerArm);
     p2 = new ArmPID(Constants.upperArmPickUpAng, m_UpperArm, -1.0);
     SmartDashboard.putData("Lower Arm Test", p1);
-    SmartDashboard.putData("Upper Arm Test", p2);
+    //SmartDashboard.putData("Upper Arm Test", p2);
 
     SmartDashboard.putData("Auto", m_AutoOutAlignComm.andThen(m_Driveback));
 
