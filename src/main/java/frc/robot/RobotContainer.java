@@ -23,6 +23,7 @@ import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.commands.AutoOutAlign;
 import frc.robot.commands.DRIVEBACK;
+import frc.robot.commands.UpperArmExtend;
 
 //The Important One
 public class RobotContainer {
@@ -45,6 +46,7 @@ public class RobotContainer {
   private final DRIVEBACK m_Driveback = new DRIVEBACK(m_Drive2);
   private LowerArmExtend p1;
   private ArmPID p2;
+  private UpperArmExtend uper;
 
   public RobotContainer() {
 
@@ -91,10 +93,13 @@ public class RobotContainer {
     //   m_Drive2.setDriveMode(Constants.driveSpeedKillDefault);
     // }, m_Drive2));
 
-    p1 = new LowerArmExtend(m_LowerArm);
-    p2 = new ArmPID(Constants.upperArmPickUpAng, m_UpperArm, -1.0);
-    SmartDashboard.putData("Lower Arm Test", p1);
-    //SmartDashboard.putData("Upper Arm Test", p2);
+    // p1 = new LowerArmExtend(m_LowerArm);
+    // p2 = new ArmPID(Constants.upperArmPickUpAng, m_UpperArm, -1.0);
+    // SmartDashboard.putData("Lower Arm Test", p1);
+    // //SmartDashboard.putData("Upper Arm Test", p2);
+    // uper = new UpperArmExtend(m_UpperArm);
+    // SmartDashboard.putData("Upper Arm Extend Test", uper);
+    
 
     SmartDashboard.putData("Auto", m_AutoOutAlignComm.andThen(m_Driveback));
 
@@ -109,10 +114,9 @@ public class RobotContainer {
 
     armController.a().onTrue(new ArmPID(Constants.lowerArmPickUpAng, m_LowerArm, -1.0)
         .andThen(new ArmPID(Constants.upperArmPickUpAng, m_UpperArm, -1.0)));
-
-    armController.x().onTrue(new ArmPID(Constants.upperArmFullExtendAng, m_UpperArm, 1.0)
-        .andThen(new ArmPID(Constants.lowerArmFullExtendAng, m_LowerArm , -1.0)));
 */
+    armController.x().onTrue(new LowerArmExtend( m_LowerArm).andThen(new UpperArmExtend( m_UpperArm)).andThen(()->{m_Claw.setSolenoid(true);}, m_Claw));
+
     armController.rightBumper().onTrue(new RunCommand(() -> {
       m_Claw.setSolenoid(true);
     }, m_Claw));

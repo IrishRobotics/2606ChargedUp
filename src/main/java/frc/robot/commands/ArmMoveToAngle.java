@@ -7,7 +7,7 @@ import frc.robot.subsystems.ArmSub;
 
 public class ArmMoveToAngle extends CommandBase {
     double currentSpeed = 0.0;
-    double maxSpeed = .5;
+    double maxSpeed = .4;
     double maxAccelPerTick = maxSpeed / 25.0;
     double startAngle = 0.0;
     int ticks = 0;
