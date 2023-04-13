@@ -124,7 +124,11 @@ public class ArmSub extends SubsystemBase {
     SmartDashboard.putNumber("MotorSpeed " + Id, update);
   }
 
+  public void updateArmStupid(double d){
+    armControl.set(d*Constants.armSpeedKill);
+  }
   public double getAngle() {
+    updateAngle();
     return angle;
   }
 

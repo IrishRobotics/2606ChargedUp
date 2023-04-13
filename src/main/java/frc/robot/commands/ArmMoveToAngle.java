@@ -115,7 +115,9 @@ public class ArmMoveToAngle extends CommandBase {
         this.scaler = scaler;
         this.endAngle = endAngle;
         SmartDashboard.putData("ArmMove", this);
+        addRequirements(arm);
     }
+
 
     @Override
     public void execute() {

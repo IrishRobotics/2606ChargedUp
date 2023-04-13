@@ -4,6 +4,8 @@
 
 package frc.robot;
 
+import org.photonvision.targeting.PhotonTrackedTarget;
+
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -28,6 +30,10 @@ public class Robot extends TimedRobot {
   private CommandXboxController armController = new CommandXboxController(Constants.XboxControllerPortArm);
   private CommandXboxController driveController = new CommandXboxController(Constants.XboxControllerPortDrive);
 
+
+
+  private PhotonCameraWrapper pcw;
+
   /**
    * This function is run when the robot is first started up and should be used for any
    * initialization code.
@@ -36,6 +42,7 @@ public class Robot extends TimedRobot {
   public void robotInit() {
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
+    pcw = new PhotonCameraWrapper();
     m_robotContainer = new RobotContainer();
   }
 
@@ -62,6 +69,11 @@ public class Robot extends TimedRobot {
      } else{
       m_robotContainer.passSpeed(Constants.driveSpeedKillDefault);
      }
+     if(driveController.rightBumper().getAsBoolean()){
+      m_robotContainer.passBrake(true);
+     }else{
+      m_robotContainer.passBrake(false);
+     }
   }
 
   /** This function is called once each time the robot enters Disabled mode. */
@@ -84,7 +96,9 @@ public class Robot extends TimedRobot {
 
   /** This function is called periodically during autonomous. */
   @Override
-  public void autonomousPeriodic() {}
+  public void autonomousPeriodic() {
+   // m_autonomousCommand.schedule();
+  }
 
   @Override
   public void teleopInit() {
@@ -99,7 +113,14 @@ public class Robot extends TimedRobot {
 
   /** This function is called periodically during operator control. */
   @Override
-  public void teleopPeriodic() {}
+  public void teleopPeriodic() {
+      PhotonTrackedTarget closest = pcw.getClosestTarget();
+   
+    if(closest!=null)
+      SmartDashboard.putNumber("nearestTarget", closest .getFiducialId());
+    else
+      SmartDashboard.putNumber("nearestTarget", -1);
+  }
 
   @Override
   public void testInit() {

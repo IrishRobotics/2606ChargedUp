@@ -1,0 +1,19 @@
+{
+  "NetworkTables": {
+    "types": {
+      "/FMSInfo": "FMSInfo",
+      "/SmartDashboard/ARM MOTOR1": "Motor Controller",
+      "/SmartDashboard/ARM MOTOR3": "Motor Controller",
+      "/SmartDashboard/ARM1": "Subsystem",
+      "/SmartDashboard/ARM3": "Subsystem",
+      "/SmartDashboard/ArmMove": "Command",
+      "/SmartDashboard/Auto": "Command",
+      "/SmartDashboard/Field": "Field2d",
+      "/SmartDashboard/LIMIT": "Digital Input"
+    }
+  },
+  "NetworkTables Settings": {
+    "mode": "Client (NT4)",
+    "serverTeam": "10.26.6.2"
+  }
+}

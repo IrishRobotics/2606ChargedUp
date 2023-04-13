@@ -2,6 +2,7 @@ package frc.robot.commands;
 
 import org.photonvision.targeting.PhotonTrackedTarget;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
 import frc.robot.PhotonCameraWrapper;
@@ -20,7 +21,8 @@ public class AutoOutAlign extends CommandBase{
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
-        drive.drive(-Constants.AutoSpeed, 0, 0, false); 
+        drive.drive(0, Constants.AutoSpeed, 0, false); 
+        SmartDashboard.putNumber("nearestTarget", pcw.getClosestTarget().getFiducialId());
     
     }
   

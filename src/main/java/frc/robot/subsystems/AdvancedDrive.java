@@ -103,7 +103,7 @@ public class AdvancedDrive extends SubsystemBase {
   new MecanumDrivePoseEstimator(
           Constants.mecanumKinie, m_navX2.getRotation2d(), getCurrentWheelDistances(), new Pose2d());
 
-    
+    enableMotors(false);
   }
 
   @Override
@@ -153,9 +153,9 @@ public class AdvancedDrive extends SubsystemBase {
     SmartDashboard.putNumber("Robot actual X", deadzone(xSpeed)*speedMultiplier);
     
       if(useGyro)
-        m_drive.driveCartesian(deadzone(xSpeed)*speedMultiplier, deadzone(ySpeed) *speedMultiplier, deadzone(rot)*speedMultiplier*.5, m_navX2.getRotation2d());
+        m_drive.driveCartesian(deadzone(xSpeed)*speedMultiplier, deadzone(ySpeed) *speedMultiplier*Constants.strafeSpeedKill, deadzone(rot)*speedMultiplier*.25, m_navX2.getRotation2d());
       else
-        m_drive.driveCartesian(deadzone(xSpeed)*speedMultiplier, deadzone(ySpeed) *speedMultiplier, deadzone(rot)*speedMultiplier*.5);
+        m_drive.driveCartesian(deadzone(xSpeed)*speedMultiplier, deadzone(ySpeed) *speedMultiplier*Constants.strafeSpeedKill, deadzone(rot)*speedMultiplier*.25);
    }
   public double deadzone(double s){
     if(Math.abs(s)<0.1)
